@@ -5,6 +5,10 @@
   "dependencies": {
     "express": "^4.17.1"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npx tsc"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
