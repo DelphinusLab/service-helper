@@ -2,7 +2,7 @@ const axios = require('axios').default;
 
 export class RestEndpoint {
   constructor(public endpoint: string, public username: string, public useraddress: string) { };
-  async prepareRequest(method: "GET" | "POST", url: string, body: JSON | null) {
+  async prepareRequest(method: "GET" | "POST", url: string, body: JSON | FormData | null) {
     if (method === 'GET') {
       console.log(this.endpoint + url);
       try {
@@ -31,7 +31,7 @@ export class RestEndpoint {
     return json["result"];
   }
 
-  async invokeRequest(method: "GET"|"POST", url: string, body: JSON | null) {
+  async invokeRequest(method: "GET"|"POST", url: string, body: JSON | FormData | null) {
     let response = await this.prepareRequest(method, url, body);
     return await this.getJSONResponse(response);
   }
