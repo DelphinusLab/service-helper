@@ -1,12 +1,26 @@
-const axios = require('axios').default;
-
+import axios from "axios";
+import FormData from "form-data";
 export class RestEndpoint {
-  constructor(public endpoint: string, public username: string, public useraddress: string) { };
-  async prepareRequest(method: "GET" | "POST", url: string, body: JSON | null) {
-    if (method === 'GET') {
+  constructor(
+    public endpoint: string,
+    public username: string,
+    public useraddress: string
+  ) {}
+  async prepareRequest(
+    method: "GET" | "POST",
+    url: string,
+    body: JSON | FormData | null,
+    headers?: {
+      [key: string]: string;
+    }
+  ) {
+    if (method === "GET") {
       console.log(this.endpoint + url);
       try {
-        let response = await axios.get(this.endpoint + url, body ? { params: body! } : {});
+        let response = await axios.get(
+          this.endpoint + url,
+          body ? { params: body! } : {}
+        );
         return response.data;
       } catch (e: any) {
         console.error(e);
@@ -14,7 +28,15 @@ export class RestEndpoint {
       }
     } else {
       try {
-        let response = await axios.post(this.endpoint + url, body ? body! : {});
+        let response = await axios.post(
+          this.endpoint + url,
+          body ? body! : {},
+          {
+            headers: {
+              ...headers,
+            },
+          }
+        );
         return response.data;
       } catch (e: any) {
         console.log(e);
@@ -31,10 +53,15 @@ export class RestEndpoint {
     return json["result"];
   }
 
-  async invokeRequest(method: "GET"|"POST", url: string, body: JSON | null) {
-    let response = await this.prepareRequest(method, url, body);
+  async invokeRequest(
+    method: "GET" | "POST",
+    url: string,
+    body: JSON | FormData | null,
+    headers?: {
+      [key: string]: string;
+    }
+  ) {
+    let response = await this.prepareRequest(method, url, body, headers);
     return await this.getJSONResponse(response);
   }
 }
-
-
